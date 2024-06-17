@@ -1,74 +1,54 @@
 package pages;
 
-import baseEntities.BasePage;
+
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BurgerMenuBarPage extends BasePage {
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
+
+public class BurgerMenuBarPage {
 
     //locator block
 
-    private By mainMenuLocator = By.className("menu-burger__main-list-link");
-    private By dropMenuLocator = By.cssSelector(".menu-burger__link");
+    private ElementsCollection mainMenu = $$(".menu-burger__main-list-link");
+    private ElementsCollection dropMenu = $$(".menu-burger__link");
 
-
-    public BurgerMenuBarPage(WebDriver driver) {
-        super(driver);
-    }
+    private ElementsCollection lastDropMenu = $$(By.xpath("//ul[@class='menu-burger__set']/li/a[@class='menu-burger__link']"));
 
 
     //getters block
-    private List<WebElement> getMainMenu() {
-        return waitsService.waitForAllVisibleElementsLocatedBy(mainMenuLocator);
+
+    public ElementsCollection getMainMenu() {
+        return mainMenu;
     }
 
-    private List<WebElement> getDropMenu() {
-        return waitsService.waitForAllVisibleElementsLocatedBy(dropMenuLocator);
+    public ElementsCollection getDropMenu() {
+        return dropMenu;
     }
 
-    //select locator block
-    private WebElement selectMainMenuByMenuName(String menuName) {
-        WebElement mainMenuElementByName = null;
-        List<WebElement> mainMenuLocatorsList = new ArrayList<>(getMainMenu());
-        for (WebElement element : mainMenuLocatorsList) {
-            if (element.getText().equals(menuName)) {
-                mainMenuElementByName = element;
-                break;
-            }
-        }
-        return mainMenuElementByName;
+    public ElementsCollection getLastDropMenu() {
+        return lastDropMenu;
     }
-
-    private WebElement selectDropMenuByMenuName(String menuName) {
-        WebElement dropMenuElementByName = null;
-        List<WebElement> dropMenuLocatorsList = new ArrayList<>(getDropMenu());
-        for (WebElement element : dropMenuLocatorsList) {
-            if (element.getText().equals(menuName)) {
-                dropMenuElementByName = element;
-                break;
-            }
-        }
-        return  dropMenuElementByName;
-    }
-
 
     //action block
     public BurgerMenuBarPage clickOnMainMenuByName(String menuName) {
-        selectMainMenuByMenuName(menuName).click();
+        getMainMenu().find(text(menuName)).shouldBe(visible).click();
         return this;
     }
 
     public BurgerMenuBarPage clickOnDropMenuByName(String menuName) {
-        selectDropMenuByMenuName(menuName).click();
+        getDropMenu().find(text(menuName)).click();
         return this;
     }
 
     public CatalogPage lastClickOnDropdownMenuAndGoToCatalogByName(String menuName) {
-        selectDropMenuByMenuName(menuName).click();
-        return new CatalogPage(driver);
+        getLastDropMenu().find(text(menuName)).shouldBe(visible).click();
+        return new CatalogPage();
     }
 }

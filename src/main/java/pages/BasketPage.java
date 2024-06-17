@@ -1,44 +1,48 @@
 package pages;
 
-import baseEntities.BasePage;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
+import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
+
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BasketPage extends BasePage {
+public class BasketPage {
     //Locators block
-    private By productLocator = By.cssSelector(".good-info__title.j-product-popup");
-    private By productPriceCardLocator = By.cssSelector(".list-item__price-new.wallet");
-    private By productPriceWithWBWalletLocator = By.className("list-item__price-wallet");
-    private By totalPriceLocator = By.xpath("//p[@class='b-top__total line' ]/span/span");
-    private By toOrderButtonLocator = By.className("b-btn-do-order");
+    private SelenideElement listItem = $(".list-item__good");
+    private SelenideElement product = $(".good-info__title.j-product-popup");
+    private SelenideElement productPriceCard = $(".list-item__price-new");
+    private SelenideElement productPriceWithWBWallet = $(".list-item__price-wallet");
+    private SelenideElement totalPrice = $(By.xpath("//p[@class='b-top__total line' ]/span/span"));
+    private SelenideElement toOrderButton = $(".b-btn-do-order");
 
-
-    public BasketPage(WebDriver driver) {
-        super(driver);
-    }
 
     //getters block
-    private WebElement getToOrderButton() {
-        return waitsService.waitToBeClickableByLocator(toOrderButtonLocator);
+
+    private SelenideElement getProduct() {
+        return product;
     }
 
-    private WebElement getProduct() {
-        return waitsService.waitForExist(productLocator);
+    public SelenideElement getListItem() {
+        return listItem;
     }
 
-    private WebElement getTotalPrice() {
-        return waitsService.waitForExist(totalPriceLocator);
+    private SelenideElement getProductPriceWithWBWallet() {
+        return productPriceWithWBWallet;
     }
 
-    private WebElement getProductPrice() {
-        return waitsService.waitForVisibilityBy(productPriceCardLocator);
+    private SelenideElement getProductPriceCard() {
+        return productPriceCard;
     }
 
-    private WebElement getProductPriceWithWBWallet() {
-        return waitsService.waitForExist(productPriceWithWBWalletLocator);
+    private SelenideElement getTotalPrice() {
+        return totalPrice;
+    }
+
+    private SelenideElement getToOrderButton() {
+        return toOrderButton;
     }
 
     //verifications block
@@ -49,15 +53,16 @@ public class BasketPage extends BasePage {
     }
 
     public BasketPage productPricesVerification(String price) {
-        assertEquals(price, getProductPrice().getText());
+        getProductPriceCard().shouldBe(visible).shouldHave(text(price));
         return this;
     }
 
     public BasketPage totalPriceVerification(String totalPrice) {
-        assertEquals(totalPrice, getTotalPrice().getText());
+        getTotalPrice().shouldBe(visible).shouldHave(text(totalPrice));
         return this;
     }
-    public BasketPage toOrderButtonIsClicable(){
+
+    public BasketPage toOrderButtonIsClicable() {
         getToOrderButton();
         return this;
     }

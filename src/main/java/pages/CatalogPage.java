@@ -1,139 +1,130 @@
 package pages;
 
-import baseEntities.BasePage;
+
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codeborne.selenide.CollectionCondition.size;
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CatalogPage extends BasePage {
+public class CatalogPage {
 
     //locators block
-    private By firstProductInCatalogLocator = By.xpath("//*[@id=\"c165760752\"]/div/div[1]");
-    private By firstAddToBasketButtonLocator = By.xpath("//*[@id=\"c75364110\"]/div/div[4]/p[3]/a");
-    private By firstProductCardNameLocator = By.xpath("//*[@id=\"c171459981\"]/div/div/h2/span/span[@class='product-card__brand']");
-    private By searchingResultsTitleLocator = By.className("searching-results__title");
-    private By firstFilterLocator = By.xpath("//div/button[@class='dropdown-filter__btn dropdown-filter__btn--burger']");
-    private By secondFilterLocator = By.xpath("//button[@class='dropdown-filter__btn dropdown-filter__btn--sorter']");
-    private By catalogTitleLocator = By.className("catalog-title");
-    private By breadcrumbsLinkLocator = By.xpath("//span[@itemprop='name']");
-    private By filterDropdownMenuButtonLocator = By.cssSelector(".dropdown-filter.j-show-all-filtres");
-    private By allFiltersCounterLocator = By.xpath("//div[@class='dropdown-filter j-show-all-filtres']/span");
-    private By productCounterLocator = By.xpath("//span[@data-link='html{spaceFormatted:pagerModel.totalItems}']");
-    private By productCardLocator = By.className("product-card__wrapper");
-    private By filtersChoiceListLocator = By.className("your-choice__btn");
+    private SelenideElement firstProductInCatalog = $(By.xpath("//*[@id=\"c165760752\"]/div/div[1]"));
+    private SelenideElement mainContent = $(".main-page__content");
+    private SelenideElement searchingResultsTitle = $(".searching-results__title");
+    private SelenideElement firstFilter = $(By.xpath("//div/button[@class='dropdown-filter__btn dropdown-filter__btn--burger']"));
+    private SelenideElement secondFilter = $(By.xpath("//button[@class='dropdown-filter__btn dropdown-filter__btn--sorter']"));
+    private SelenideElement catalogTitle = $(".catalog-title");
+    private SelenideElement filterDropdownMenuButton = $((".dropdown-filter.j-show-all-filtres"));
+    private SelenideElement allFiltersCounter = $(By.xpath("//div[@class='dropdown-filter j-show-all-filtres']/span"));
+    private SelenideElement productCounter = $(By.xpath("//span[@data-link='html{spaceFormatted:pagerModel.totalItems}']"));
+    private SelenideElement productCardList = $(".product-card-list");
+    private ElementsCollection productCard = $$(".product-card__wrapper");
+    private ElementsCollection filtersChoice = $$(".your-choice__btn");
+    private ElementsCollection breadcrumbsLink = $$(By.xpath("//span[@itemprop='name']"));
+    private ElementsCollection addToBasketButton = $$(".product-card__add-basket.j-add-to-basket.btn-main");
+    private ElementsCollection productCardBrand = $$(".product-card__brand");
 
-
-    public CatalogPage(WebDriver driver) {
-        super(driver);
-    }
 
     //getters block
-    private List<WebElement> getFiltersChoice() {
-        return waitsService.waitForAllForExistLocated(filtersChoiceListLocator);
+
+    public SelenideElement getMainContent() {
+        return mainContent;
     }
 
-    private List<WebElement> getProductCards() {
-        return waitsService.waitForAllForExistLocated(productCardLocator);
+    public SelenideElement getProductCardList() {
+        return productCardList;
     }
 
-    private WebElement getProductCounter() {
-        return waitsService.waitForExist(productCounterLocator);
+    public ElementsCollection getProductCardBrand() {
+        return productCardBrand;
     }
 
-    private WebElement getFilterCounter() {
-        return waitsService.waitForExist(allFiltersCounterLocator);
+    private SelenideElement getFirstProductInCatalog() {
+        return firstProductInCatalog;
     }
 
-    private WebElement getFilterDropdownMenuButton() {
-        return waitsService.waitForExist(filterDropdownMenuButtonLocator);
+    private ElementsCollection getAddToBasketButton() {
+        return addToBasketButton;
     }
 
-    private WebElement getFirstProductInCatalog() {
-        return waitsService.waitForVisibilityBy(firstProductInCatalogLocator);
+    private ElementsCollection getProductCardBrande() {
+        return productCard;
     }
 
-    private WebElement getSearchingResultsTitle() {
-        return waitsService.waitForExist(searchingResultsTitleLocator);
+    private SelenideElement getSearchingResultsTitle() {
+        return searchingResultsTitle;
     }
 
-    private WebElement getFirstFilter() {
-        return waitsService.waitForExist(firstFilterLocator);
+    private SelenideElement getFirstFilter() {
+        return firstFilter;
     }
 
-    private WebElement getSecondFilter() {
-        return waitsService.waitForExist(secondFilterLocator);
+    private SelenideElement getSecondFilter() {
+        return secondFilter;
     }
 
-    private WebElement getFirstProductCardName() {
-        return waitsService.waitForExist(firstProductCardNameLocator);
+    private SelenideElement getCatalogTitle() {
+        return catalogTitle;
     }
 
-    private WebElement getCatalogTitle() {
-        return waitsService.waitForExist(catalogTitleLocator);
+    private SelenideElement getFilterDropdownMenuButton() {
+        return filterDropdownMenuButton;
     }
 
-    private WebElement getFirstAddToBasketButton() {
-        return waitsService.waitForVisibilityBy(firstAddToBasketButtonLocator);
+    private SelenideElement getAllFiltersCounter() {
+        return allFiltersCounter;
     }
 
-    private List<WebElement> getBreadcrumbsLinks() {
-        return waitsService.waitForAllForExistLocated(breadcrumbsLinkLocator);
+    private SelenideElement getProductCounter() {
+        return productCounter;
     }
 
-    //selectors block
-    private WebElement selectBreadcrumbsLinksByName(String linkName) {
-        WebElement breadcrumbsLinksByName = null;
-        List<WebElement> breadcrumbsLinksList = new ArrayList<>(getBreadcrumbsLinks());
-        for (WebElement element : breadcrumbsLinksList) {
-            if (element.getText().equals(linkName)) {
-                breadcrumbsLinksByName = element;
-                break;
-            }
-        }
-        return breadcrumbsLinksByName;
+    private ElementsCollection getProductCard() {
+        return productCard;
     }
 
-    private WebElement selectBreadcrumbsLinksByIndex(int index) {
-        List<WebElement> breadcrumbsLinksList = new ArrayList<>(getBreadcrumbsLinks());
-        return breadcrumbsLinksList.get(index);
+    private ElementsCollection getFiltersChoice() {
+        return filtersChoice;
     }
 
-    private WebElement selectFiltersChoiceLinksByIndex(int index) {
-        List<WebElement> filtersChoisesList = new ArrayList<>(getFiltersChoice());
-        return filtersChoisesList.get(index);
+    private ElementsCollection getBreadcrumbsLink() {
+        return breadcrumbsLink;
     }
-
 
     //actions block
 
-    public TopBarPage clickOnAddToBasketButton() {
-        getFirstAddToBasketButton().click();
-        return new TopBarPage(driver);
+    public TopBarPage clickOnAddToBasketButton(int index) {
+        getAddToBasketButton().get(index).shouldBe(visible).shouldBe(clickable).click();
+        return new TopBarPage();
     }
 
     public FiltersPage clickOnFilterButton() {
         getFilterDropdownMenuButton().click();
-        return new FiltersPage(driver);
+        return new FiltersPage();
     }
 
     //verifications block
     public CatalogPage searchingResultsVerification(String expectedText) {
-        assertEquals(expectedText, getSearchingResultsTitle().getText());
+        getSearchingResultsTitle().shouldBe(visible).shouldHave(text(expectedText));
         return this;
     }
 
     public CatalogPage firstFilterVerification(String filterName) {
-        assertEquals(filterName, getFirstFilter().getText());
+        getFirstFilter().shouldBe(visible).shouldHave(exactText(filterName));
         return this;
     }
 
     public CatalogPage secondFilterVerification(String filterName) {
-        assertEquals(filterName, getSecondFilter().getText());
+        getSecondFilter().shouldBe(visible).shouldHave(text(filterName));
         return this;
     }
 
@@ -142,43 +133,42 @@ public class CatalogPage extends BasePage {
         return this;
     }
 
-    public CatalogPage firstProductCardLabelVerification(String productLabel) {
-        assertEquals(productLabel, getFirstProductCardName().getText());
+    public CatalogPage productCardLabelVerification(int index, String productLabel) {
+        getProductCardBrande().get(0).shouldBe(visible).shouldHave(text(productLabel));
         return this;
     }
 
     public CatalogPage catalogTitleVerification(String catalogTitleName) {
-        assertEquals(catalogTitleName, getCatalogTitle().getText());
+        getCatalogTitle().shouldBe(visible).shouldHave(text(catalogTitleName));
         return this;
     }
 
     public CatalogPage breadcrumbsLinksVerification(String... linksArray) {
         for (int i = 0; i < linksArray.length; i++) {
-            assertEquals(linksArray[i], selectBreadcrumbsLinksByIndex(i).getText());
+            assertEquals(linksArray[i], getBreadcrumbsLink().get(i).getText());
         }
         return this;
     }
 
     public CatalogPage filtersChoiceListVerification(String... filterArray) {
         for (int i = 0; i < filterArray.length; i++) {
-            assertEquals(filterArray[i], selectFiltersChoiceLinksByIndex(i).getText());
+            assertEquals(filterArray[i], getFiltersChoice().get(i).getText());
         }
         return this;
     }
 
     public CatalogPage allFiltersCounterVerification(String counterValue) {
-        assertEquals(counterValue, getFilterCounter().getText());
-        return new CatalogPage(driver);
+        getAllFiltersCounter().shouldBe(visible).shouldHave(text(counterValue));
+        return new CatalogPage();
     }
 
-    public CatalogPage productCounterVerification() {
-        assertEquals(getProductCounter().getText(), String.valueOf(getProductCards().size()));
+    public CatalogPage productCounterVerification(String size) {
+        getProductCounter().shouldBe(text(size));
         return this;
     }
 
-
     public CatalogPage pageIsOpened() {
-        waitsService.waitForExist(catalogTitleLocator).isDisplayed();
+        getCatalogTitle().shouldBe(visible);
         return this;
     }
 }

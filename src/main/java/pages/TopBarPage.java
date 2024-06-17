@@ -1,104 +1,108 @@
 package pages;
 
-import baseEntities.BasePage;
+
+import com.codeborne.selenide.ClickOptions;
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TopBarPage extends BasePage {
+public class TopBarPage {
 
     //locators block
-    private By searchInputLocator = By.id("searchInput");
-    private By searchButtonLocator = By.id("applySearchBtn");
-    private By clearButtonLocator = By.cssSelector(".search-catalog__btn.search-catalog__btn--clear");
-    private By addressMenuLocator = By.cssSelector(".simple-menu__link.simple-menu__link--address");
-    private By jMenuBurgerButtonLocator = By.className("nav-element__burger-line");
-    private By basketButtonLocator = By.cssSelector(".navbar-pc__icon.navbar-pc__icon--basket");
-    private By basketNavbarNotifyLocator = By.xpath("//span[@class='navbar-pc__notify']");
+    private SelenideElement searchInput = $("#searchInput");
+    private SelenideElement mainContent = $(".main-page__content");
+    private SelenideElement searchButton = $("#applySearchBtn");
+    private SelenideElement clearButton = $(".search-catalog__btn.search-catalog__btn--clear");
+    private SelenideElement addressMenu = $(".simple-menu__link.simple-menu__link--address");
+    private SelenideElement jMenuBurgerButton = $(".nav-element__burger-line");
+    private SelenideElement basketButton = $(".navbar-pc__icon.navbar-pc__icon--basket");
+    private SelenideElement basketNavbarNotify = $(By.xpath("//span[@class='navbar-pc__notify']"));
 
-
-    public TopBarPage(WebDriver driver) {
-        super(driver);
-    }
 
     //getters block
-    private WebElement getBasketButton() {
-        return waitsService.waitForExist(basketButtonLocator);
+
+    private SelenideElement getSearchInput() {
+        return searchInput;
     }
 
-    private WebElement getBasketNavbarNotify() {
-        return waitsService.waitForExist(basketNavbarNotifyLocator);
+    private SelenideElement getSearchButton() {
+        return searchButton;
     }
 
-    private WebElement getSearchInputLocator() {
-        return waitsService.waitForExist(searchInputLocator);
+    private SelenideElement getClearButton() {
+        return clearButton;
     }
 
-    private WebElement getSearchButtonLocator() {
-        return waitsService.waitToBeClickableByLocator(searchButtonLocator);
+    private SelenideElement getAddressMenu() {
+        return addressMenu;
     }
 
-    private WebElement getClearButtonLocator() {
-        return waitsService.waitToBeClickableByLocator(clearButtonLocator);
+    private SelenideElement getjMenuBurgerButton() {
+        return jMenuBurgerButton;
     }
 
-    private WebElement getAddressMenuLocator() {
-        return waitsService.waitToBeClickableByLocator(addressMenuLocator);
+    private SelenideElement getBasketButton() {
+        return basketButton;
     }
 
-    private WebElement getJMenuBurgerButtonLocator() {
-        return waitsService.waitForVisibilityBy(jMenuBurgerButtonLocator);
+    private SelenideElement getBasketNavbarNotify() {
+        return basketNavbarNotify;
     }
 
-
+    public SelenideElement getMainContent() {
+        return mainContent;
+    }
     //action block
 
     public CatalogPage searchProduct(String productName) {
-        getSearchInputLocator().sendKeys(productName, Keys.ENTER);
-        return new CatalogPage(driver);
+        getSearchInput().sendKeys(productName, Keys.ENTER);
+        return new CatalogPage();
     }
 
     public CatalogPage clickOnSearchButton() {
-        getSearchButtonLocator().click();
-        return new CatalogPage(driver);
+        getSearchButton().click();
+        return new CatalogPage();
     }
 
     public TopBarPage clearSearchLine() {
-        getClearButtonLocator().click();
+        getClearButton().click();
         return this;
     }
 
     public MapPage clickOnAddressLocator() {
-        getAddressMenuLocator().click();
-        return new MapPage(driver);
+        getAddressMenu().shouldBe(visible).shouldBe(clickable).click();
+        return new MapPage();
     }
 
     public BurgerMenuBarPage clickOnjBurgerMenuButton() {
-        getJMenuBurgerButtonLocator().click();
-        return new BurgerMenuBarPage(driver);
+        getMainContent().shouldBe(visible);
+        getjMenuBurgerButton().shouldBe(visible).click();
+        return new BurgerMenuBarPage();
     }
 
     public BasketPage clickOnBasketButton() {
         getBasketButton().click();
-        return new BasketPage(driver);
+        return new BasketPage();
     }
 
     // verifications block
     public TopBarPage searchLineIsClean() {
-        assertEquals("", getSearchInputLocator().getText());
+        assertEquals("", getSearchInput().getText());
         return this;
     }
 
     public TopBarPage addressMenuVerification(String address) {
-        assertEquals(address, getAddressMenuLocator().getText());
+        getAddressMenu().shouldBe(visible).shouldHave(text(address));
         return this;
     }
 
     public TopBarPage pageIsOpened() {
-        waitsService.waitForExist(searchInputLocator).isDisplayed();
+        getSearchInput().shouldBe(visible);
         return this;
     }
 

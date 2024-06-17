@@ -1,40 +1,34 @@
 package tests;
 
 import baseEntities.BaseTest;
+import models.Order;
 import org.junit.jupiter.api.Test;
 import pages.CatalogPage;
 import pages.TopBarPage;
 
 public class BasketPageTest extends BaseTest {
-    String firstItemInMenu = "Бытовая техника";
-    String secondItemInMenu = "Техника для дома";
-    String thirdItemInMenu = "Пылесосы и пароочистители";
-    String fourthItemInMenu = "Вертикальные пылесосы";
-    String color = "rgba(245, 81, 35, 1)";
-    String basketCounter = "1";
-    String price = "2 345 ₽";
-    String totalPrice = "2 345 ₽";
-    String productCardInfo = "Вертикальный ручной Пылесос для дома с контейнером, Deerma";
+
+    Order newOrder = new Order();
 
     @Test
-    public void addProductToBasketTest() throws InterruptedException {
-        new TopBarPage(driver)
+    public void addProductToBasketTest() {
+        new TopBarPage()
                 .clickOnjBurgerMenuButton()
-                .clickOnMainMenuByName(firstItemInMenu)
-                .clickOnDropMenuByName(secondItemInMenu)
-                .clickOnDropMenuByName(thirdItemInMenu)
-                .lastClickOnDropdownMenuAndGoToCatalogByName(fourthItemInMenu)
+                .clickOnMainMenuByName(newOrder.getFirstItemInMenu())
+                .clickOnDropMenuByName(newOrder.getSecondItemInMenu())
+                .clickOnDropMenuByName(newOrder.getThirdItemInMenu())
+                .lastClickOnDropdownMenuAndGoToCatalogByName(newOrder.getFourthItemInMenu())
                 .pageIsOpened()
-                .catalogTitleVerification(fourthItemInMenu)
-                .breadcrumbsLinksVerification("Главная", firstItemInMenu,
-                        secondItemInMenu, thirdItemInMenu, fourthItemInMenu)
-                .clickOnAddToBasketButton()
-                .basketNavbarNotifyBackgroundColorVerification(color)
-                .basketCounterNotification(basketCounter)
+                .catalogTitleVerification(newOrder.getFourthItemInMenu())
+                .breadcrumbsLinksVerification("Главная",newOrder.getFirstItemInMenu(),
+                        newOrder.getSecondItemInMenu(), newOrder.getThirdItemInMenu(),newOrder.getFourthItemInMenu())
+                .clickOnAddToBasketButton(0)
+                .basketNavbarNotifyBackgroundColorVerification(newOrder.getColor())
+                .basketCounterNotification(newOrder.getBasketCounter())
                 .clickOnBasketButton()
-                .productInfoVerification(productCardInfo)
-                .productPricesVerification(price)
-                .totalPriceVerification(totalPrice)
+                .productInfoVerification(newOrder.getProductCardInfo())
+                .productPricesVerification(newOrder.getPrice())
+                .totalPriceVerification(newOrder.getTotalPrice())
                 .toOrderButtonIsClicable();
     }
 }

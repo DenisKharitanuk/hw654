@@ -1,36 +1,32 @@
 package pages;
 
-import baseEntities.BasePage;
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
-public class FiltersPage extends BasePage {
+import static com.codeborne.selenide.Selenide.$;
+
+public class FiltersPage {
     //locators block
-    private By priceStartInLocator = By.name("startN");
-    private By endPriceLocator = By.name("endN");
-    private By showButtonLocator = By.className("filters-desktop__btn-main");
+    private SelenideElement priceStartIn = $(By.name("startN"));
+    private SelenideElement endPrice = $(By.name("endN"));
+    private SelenideElement showButton = $(".filters-desktop__btn-main");
 
     //constructors block
-    public FiltersPage(WebDriver driver) {
-        super(driver);
+
+    private SelenideElement getPriceStartIn() {
+        return priceStartIn;
     }
 
-    // getters block
-    private WebElement getShowButton() {
-        return waitsService.waitForExist(showButtonLocator);
+    private SelenideElement getEndPrice() {
+        return endPrice;
     }
 
-    private WebElement getPriceStartIn() {
-        return waitsService.waitForExist(priceStartInLocator);
+    private SelenideElement getShowButton() {
+        return showButton;
     }
 
-    private WebElement getEndPrice() {
-        return waitsService.waitForExist(endPriceLocator);
-    }
-
-    private WebElement getRadioOrCheckboxButton(String OrCheckbox) {
-        return waitsService.waitForVisibilityBy(By.xpath("//span[text()='" + OrCheckbox + "']/preceding-sibling::span"));
+    private SelenideElement getRadioOrCheckboxButton(String OrCheckbox) {
+        return $(By.xpath("//span[text()='" + OrCheckbox + "']/preceding-sibling::span"));
     }
 
     //actions block
@@ -53,6 +49,6 @@ public class FiltersPage extends BasePage {
 
     public CatalogPage clickOnShowButton() {
         getShowButton().click();
-        return new CatalogPage(driver);
+        return new CatalogPage();
     }
 }

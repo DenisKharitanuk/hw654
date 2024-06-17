@@ -24,8 +24,4 @@ public class ReadProperties {
     public static String browserName() {
         return properties.getProperty("browser");
     }
-
-    public static int timeout() {
-        return Integer.parseInt(properties.getProperty("timeout"));
-    }
 }

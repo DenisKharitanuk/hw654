@@ -1,22 +1,20 @@
 package baseEntities;
 
-import configuration.ReadProperties;
-import org.junit.jupiter.api.AfterEach;
+import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
-import org.openqa.selenium.WebDriver;
-import services.BrowsersService;
+
+import static com.codeborne.selenide.Selenide.open;
+import static configuration.ReadProperties.getUrl;
 
 public class BaseTest {
-    protected WebDriver driver;
+
 
     @BeforeEach
     public void setup() {
-        driver = new BrowsersService().getDriver();
-        driver.get(ReadProperties.getUrl());
+        Configuration.baseUrl = getUrl();
+        Configuration.reportsFolder = "target/screenshoots/";
+        Configuration.browserSize="1920x1080";
+        open(getUrl());
     }
 
-    @AfterEach
-    public void tearDown() {
-        driver.quit();
-    }
 }

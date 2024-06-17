@@ -1,37 +1,31 @@
 package tests;
 
 import baseEntities.BaseTest;
+import models.Filter;
 import org.junit.jupiter.api.Test;
 import pages.TopBarPage;
 
 public class FiltersPageTest extends BaseTest {
-    String firstItemInMenu = "Электроника";
-    String secondItemInMenu = "Ноутбуки и компьютеры";
-    String thirdItemInMenu = "Ноутбуки";
-    String priceStartIn = "100 000";
-    String priceEnd = "149 000";
-    String radioButtonName = "до 3 дней";
-    String firstCheckboxName = "Apple";
-    String secondCheckboxName = "15.3\"";
-    String counterValue = "4";
+
+    Filter filter = new Filter();
 
     @Test
-    public void workWithFilters() throws InterruptedException {
-        new TopBarPage(driver)
+    public void workWithFilters() {
+        new TopBarPage()
                 .clickOnjBurgerMenuButton()
-                .clickOnMainMenuByName(firstItemInMenu)
-                .clickOnDropMenuByName(secondItemInMenu)
-                .lastClickOnDropdownMenuAndGoToCatalogByName(thirdItemInMenu)
+                .clickOnMainMenuByName(filter.getFirstItemInMenu())
+                .clickOnDropMenuByName(filter.getSecondItemInMenu())
+                .lastClickOnDropdownMenuAndGoToCatalogByName(filter.getThirdItemInMenu())
                 .pageIsOpened()
                 .clickOnFilterButton()
-                .clearAndInputStartInPrice(priceStartIn)
-                .clearAndInputEndPrice(priceEnd)
-                .clickOnRadioAndCheckboxButton(radioButtonName)
-                .clickOnRadioAndCheckboxButton(firstCheckboxName)
-                .clickOnRadioAndCheckboxButton(secondCheckboxName)
+                .clearAndInputStartInPrice(filter.getPriceStartIn())
+                .clearAndInputEndPrice(filter.getPriceEnd())
+                .clickOnRadioAndCheckboxButton(filter.getRadioButtonName())
+                .clickOnRadioAndCheckboxButton(filter.getFirstCheckboxName())
+                .clickOnRadioAndCheckboxButton(filter.getSecondCheckboxName())
                 .clickOnShowButton()
-                .allFiltersCounterVerification(counterValue)
-                .productCounterVerification()
-                .filtersChoiceListVerification(radioButtonName, firstCheckboxName, "от " + priceStartIn + " до " + priceEnd,secondCheckboxName,"Сбросить все");
+                .allFiltersCounterVerification(filter.getCounterValue())
+                .productCounterVerification("38")
+                .filtersChoiceListVerification(filter.getRadioButtonName(), filter.getFirstCheckboxName(), "от " + filter.getPriceStartIn() + " до " + filter.getPriceEnd(), filter.getSecondCheckboxName(), "Сбросить все");
     }
 }

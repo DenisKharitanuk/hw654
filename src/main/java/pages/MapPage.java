@@ -1,73 +1,71 @@
 package pages;
 
-import baseEntities.BasePage;
+
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Configuration.timeout;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MapPage extends BasePage {
+public class MapPage {
     //locators block
-    private By placeHolderLocator = By.xpath("//input[@placeholder='Введите адрес'][@autocomplete='off']");
-    private By addressLocator = By.xpath("//span[@class='address-item__name-text']/span");
-    private By selectButtonLocator = By.className("details-self__btn");
-    private By pickUpPointerNameLocator = By.className("details-self__name-text");
-
-
-    public MapPage(WebDriver driver) {
-        super(driver);
-    }
+    private SelenideElement placeHolder = $(By.xpath("//input[@placeholder='Введите адрес'][@autocomplete='off']"));
+    private SelenideElement selectButton = $(".details-self__btn");
+    private SelenideElement pickUpPointerName = $(".details-self__name-text");
+    private ElementsCollection address = $$(By.xpath("//span[@class='address-item__name-text']/span"));
+    private SelenideElement map = $("..ymaps-2-1-79-events-pane.ymaps-2-1-79-user-selection-none");
 
     //getters block
-    private WebElement getPickUpPointerNames() {
-        return waitsService.waitForVisibilityBy(pickUpPointerNameLocator);
+
+    public SelenideElement getMap() {
+        return map;
     }
 
-    private WebElement getPlaceHolder() {
-        return waitsService.waitForExist(placeHolderLocator);
+    private SelenideElement getPlaceHolder() {
+        return placeHolder;
     }
 
-    private WebElement getSelectButton() {
-        return waitsService.waitForVisibilityBy(selectButtonLocator);
+    private SelenideElement getSelectButton() {
+        return selectButton;
     }
 
-    private List<WebElement> getAddress() {
-        return waitsService.waitForAllForExistLocated(addressLocator);
+    private SelenideElement getPickUpPointerName() {
+        return pickUpPointerName;
     }
 
-
-    //selector locators block
-    private WebElement selectAddressByIndex(int index) {
-        List<WebElement> addresesLocatorList = new ArrayList<>(getAddress());
-        return addresesLocatorList.get(index);
+    private ElementsCollection getAddress() {
+        return address;
     }
+
 
     // actions block
     public MapPage inputAddress(String address) {
-        getPlaceHolder().sendKeys(address, Keys.ENTER);
+        getPlaceHolder().shouldBe(clickable).shouldBe(visible).sendKeys(address, Keys.ENTER);
         return this;
     }
 
     public MapPage selectOnAddressByIndex(int index) {
-        selectAddressByIndex(index).click();
+        getAddress().filter(visible).get(index).click();
         return this;
     }
 
     public TopBarPage clickOnSelectButtonLocator() {
         getSelectButton().click();
-        return new TopBarPage(driver);
+        return new TopBarPage();
     }
 
 
     // verifications block
     public MapPage pickUpPointByIndexVerification(int index) {
-        assertEquals(selectAddressByIndex(index).getText(), getPickUpPointerNames().getText());
+        getAddress().get(index).shouldBe(visible).shouldHave(text(getPickUpPointerName().getText()));
         return this;
     }
 }
