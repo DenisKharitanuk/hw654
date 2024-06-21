@@ -8,6 +8,7 @@ import org.openqa.selenium.Keys;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Configuration.timeout;
@@ -47,7 +48,8 @@ public class MapPage {
 
 
     // actions block
-    public MapPage inputAddress(String address) {
+    public MapPage inputAddress(String address) throws InterruptedException {
+        TimeUnit.SECONDS.sleep(2);
         getPlaceHolder().shouldBe(clickable).shouldBe(visible).sendKeys(address, Keys.ENTER);
         return this;
     }

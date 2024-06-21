@@ -8,7 +8,7 @@ import pages.TopBarPage;
 public class MapPageTest extends BaseTest {
     String address="Санкт-Петербург";
     @Test
-    public void changeCity(){
+    public void changeCity() throws InterruptedException {
         new TopBarPage()
                 .clickOnAddressLocator()
                 .inputAddress(address)
